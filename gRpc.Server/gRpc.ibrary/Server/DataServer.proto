@@ -1,0 +1,17 @@
+﻿syntax = "proto3";
+package DataServer;
+service DataServer {
+
+  rpc Send (Input) returns (Output) {}
+
+  rpc CallBack (Input) returns (Output) {}
+}
+
+message Input {
+  string transaction = 9201;
+  string client = 1;
+}
+
+message Output {
+  string message = 1;
+}
