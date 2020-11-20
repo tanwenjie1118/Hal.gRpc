@@ -24,16 +24,16 @@ namespace DataServer {
     static DataServerReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChdTZXJ2ZXIvRGF0YVNlcnZlci5wcm90bxIKRGF0YVNlcnZlciItCgVJbnB1",
-            "dBIUCgt0cmFuc2FjdGlvbhjxRyABKAkSDgoGY2xpZW50GAEgASgJIhkKBk91",
-            "dHB1dBIPCgdtZXNzYWdlGAEgASgJMnIKCkRhdGFTZXJ2ZXISLwoEU2VuZBIR",
-            "LkRhdGFTZXJ2ZXIuSW5wdXQaEi5EYXRhU2VydmVyLk91dHB1dCIAEjMKCENh",
-            "bGxCYWNrEhEuRGF0YVNlcnZlci5JbnB1dBoSLkRhdGFTZXJ2ZXIuT3V0cHV0",
-            "IgBiBnByb3RvMw=="));
+            "ChdTZXJ2ZXIvRGF0YVNlcnZlci5wcm90bxIKRGF0YVNlcnZlciJECgVJbnB1",
+            "dBIUCgt0cmFuc2FjdGlvbhjxRyABKAkSDgoGY2xpZW50GAEgASgJEhUKDWNs",
+            "aWVudEFkZHJlc3MYAiABKAkiGQoGT3V0cHV0Eg8KB21lc3NhZ2UYASABKAky",
+            "cgoKRGF0YVNlcnZlchIvCgRTZW5kEhEuRGF0YVNlcnZlci5JbnB1dBoSLkRh",
+            "dGFTZXJ2ZXIuT3V0cHV0IgASMwoIQ2FsbEJhY2sSES5EYXRhU2VydmVyLklu",
+            "cHV0GhIuRGF0YVNlcnZlci5PdXRwdXQiAGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::DataServer.Input), global::DataServer.Input.Parser, new[]{ "Transaction", "Client" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::DataServer.Input), global::DataServer.Input.Parser, new[]{ "Transaction", "Client", "ClientAddress" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::DataServer.Output), global::DataServer.Output.Parser, new[]{ "Message" }, null, null, null, null)
           }));
     }
@@ -68,6 +68,7 @@ namespace DataServer {
     public Input(Input other) : this() {
       transaction_ = other.transaction_;
       client_ = other.client_;
+      clientAddress_ = other.clientAddress_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -98,6 +99,17 @@ namespace DataServer {
       }
     }
 
+    /// <summary>Field number for the "clientAddress" field.</summary>
+    public const int ClientAddressFieldNumber = 2;
+    private string clientAddress_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string ClientAddress {
+      get { return clientAddress_; }
+      set {
+        clientAddress_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as Input);
@@ -113,6 +125,7 @@ namespace DataServer {
       }
       if (Transaction != other.Transaction) return false;
       if (Client != other.Client) return false;
+      if (ClientAddress != other.ClientAddress) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -121,6 +134,7 @@ namespace DataServer {
       int hash = 1;
       if (Transaction.Length != 0) hash ^= Transaction.GetHashCode();
       if (Client.Length != 0) hash ^= Client.GetHashCode();
+      if (ClientAddress.Length != 0) hash ^= ClientAddress.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -137,6 +151,10 @@ namespace DataServer {
       if (Client.Length != 0) {
         output.WriteRawTag(10);
         output.WriteString(Client);
+      }
+      if (ClientAddress.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(ClientAddress);
       }
       if (Transaction.Length != 0) {
         output.WriteRawTag(138, 191, 4);
@@ -156,6 +174,9 @@ namespace DataServer {
       if (Client.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Client);
       }
+      if (ClientAddress.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(ClientAddress);
+      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -173,6 +194,9 @@ namespace DataServer {
       if (other.Client.Length != 0) {
         Client = other.Client;
       }
+      if (other.ClientAddress.Length != 0) {
+        ClientAddress = other.ClientAddress;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -186,6 +210,10 @@ namespace DataServer {
             break;
           case 10: {
             Client = input.ReadString();
+            break;
+          }
+          case 18: {
+            ClientAddress = input.ReadString();
             break;
           }
           case 73610: {

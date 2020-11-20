@@ -5,6 +5,7 @@ using static DataServer.DataServer;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using System.Collections.Concurrent;
 
 namespace gRpc.Library.Server
 {
@@ -13,12 +14,9 @@ namespace gRpc.Library.Server
         /// <summary>
         /// this is a list of mock data
         /// the mapping of client key and client server uri
-        /// in real project , it better saved in database
+        /// in real project , it's better saved in nosql database
         /// </summary>
-        private readonly List<KeyValuePair<string, string>> configs = new List<KeyValuePair<string, string>>() {
-          new KeyValuePair<string,string>("org00001","localhost:50052"),
-          new KeyValuePair<string,string>("org00002","localhost:50053"),
-        };
+        private readonly ConcurrentDictionary<string, string> configs = new ConcurrentDictionary<string, string>() { };
 
         /// <summary>
         /// This is what client send to center
@@ -39,23 +37,29 @@ namespace gRpc.Library.Server
         /// <returns></returns>
         public override Task<Output> Send(Input request, ServerCallContext context)
         {
-            var config = configs.FirstOrDefault(t => t.Key == request.Client);
-
-            if (config.GetHashCode() > 0)
+            if (!string.IsNullOrWhiteSpace(request.Client) && !string.IsNullOrWhiteSpace(request.ClientAddress))
             {
-                var channel = new Channel(config.Value, ChannelCredentials.Insecure);
-                var client = new DataServerClient(channel);
-                var reply = client.CallBack(new Input { Client = request.Client, Transaction = request.Transaction });
-
-                // this place : do things with the reply from client
-                // TODO reply
-
-                return Task.FromResult(new Output { Message = "Success,transaction compelete :" + request.Transaction });
+                configs.AddOrUpdate(request.Client, request.ClientAddress, (x, y) => y);
             }
             else
             {
-                return Task.FromResult(new Output { Message = "Failed,no such client" });
+                return Task.FromResult(new Output { Message = "Failed, no such client" });
             }
+
+            var config = configs.FirstOrDefault(t => t.Key == request.Client);
+            var channel = new Channel(config.Value, ChannelCredentials.Insecure);
+            var client = new DataServerClient(channel);
+
+            // the real datas we need in from client
+            var reply = client.CallBack(new Input { Client = request.Client, Transaction = request.Transaction });
+
+            if (string.IsNullOrWhiteSpace(reply.Message))
+            {
+                return Task.FromResult(new Output { Message = "Failed, client has no datas to pull" });
+            }
+            // this place : start a transaction with the datas
+
+            return Task.FromResult(new Output { Message = "Success,transaction compeletes :" + request.Transaction });
         }
     }
 }

@@ -10,6 +10,7 @@ service DataServer {
 message Input {
   string transaction = 9201;
   string client = 1;
+  string clientAddress = 2;
 }
 
 message Output {

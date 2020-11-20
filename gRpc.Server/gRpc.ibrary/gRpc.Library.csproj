@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\CertificationModel.cs" />
     <Compile Include="Server\DataServer.cs" />
     <Compile Include="Server\DataServerGrpc.cs" />
     <Compile Include="Server\ServiceImpl.cs" />
