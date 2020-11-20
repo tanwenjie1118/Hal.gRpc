@@ -23,6 +23,11 @@ namespace gRpc.Servers.Helpers
             var x = HttpContext.Current.Request.Headers[Client];
             var y = HttpContext.Current.Request.Headers[ClientAddress];
 
+            if (string.IsNullOrWhiteSpace(x) || string.IsNullOrWhiteSpace(y))
+            {
+                return null;
+            }
+
             return new CertificationModel(x, y);
         }
     }

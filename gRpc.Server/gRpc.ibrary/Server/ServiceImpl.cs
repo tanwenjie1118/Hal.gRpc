@@ -2,7 +2,6 @@
 using DataServer;
 using System.Threading.Tasks;
 using static DataServer.DataServer;
-using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Collections.Concurrent;
@@ -19,18 +18,18 @@ namespace gRpc.Library.Server
         private readonly ConcurrentDictionary<string, string> configs = new ConcurrentDictionary<string, string>() { };
 
         /// <summary>
-        /// This is what client send to center
+        /// This is what client callback to center
         /// </summary>
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
         public override Task<Output> CallBack(Input request, ServerCallContext context)
         {
-            return Task.FromResult(new Output { Message = "this is my datas => " + Guid.NewGuid().ToString("N") });
+            return Task.FromResult(new Output { Message = Guid.NewGuid().ToString("N") });
         }
 
         /// <summary>
-        /// this is what server do
+        /// this is what server do when received client requests
         /// </summary>
         /// <param name="request"></param>
         /// <param name="context"></param>

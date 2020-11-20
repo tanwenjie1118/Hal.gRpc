@@ -9,11 +9,33 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
+    <!-- Bootstrap CSS -->
+    <link href="~/Content/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
-    <div> 
-        <h1>website process is running</h1>
-        <h1>@ViewBag.Reply</h1>
+    <div class="row" style="margin:20px">
+        <div class="col-12"><h1>Website process is running</h1></div>
+        <div class="col-12">
+            <h1>@Html.Raw(ViewBag.Reply)</h1>
+            <button id="pull" class="btn btn-primary">PULL</button>
+        </div>
+        <div class="col-12" id="content"></div>
     </div>
+    <script src="~/Content/js/jquery-1.11.1.min.js"></script>
+    @*<script src="~/Content/bootstrap/js/bootstrap.min.js"></script>*@
+    <script>
+        "use strict";
+
+        $('#pull').click(e => {
+            jQuery.ajax({
+                url: "/home/GetClientDatas",
+                type: "GET",
+                success: function (res) {
+                    var txt = "<h5>" + res + "</h5>";
+                    $('#content').append(txt)
+                }
+            });
+        });
+    </script>
 </body>
 </html>

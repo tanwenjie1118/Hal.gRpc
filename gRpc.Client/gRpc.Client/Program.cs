@@ -37,8 +37,8 @@ namespace gRpc.Client
 
         static void Main(string[] args)
         {
-            proxyCall();
-            RunServer();
+            RunGRpcServer();
+            RunProxy();
             Console.WriteLine("press any key to exit...");
             Console.ReadKey();
         }
@@ -46,7 +46,7 @@ namespace gRpc.Client
         /// <summary>
         /// run this to build a server for send datas from client to server when get the request from server
         /// </summary>
-        private static void RunServer()
+        private static void RunGRpcServer()
         {
             var splitstr = clientHost.Split(':');
             var port = Convert.ToInt32(splitstr[1]);
@@ -60,14 +60,16 @@ namespace gRpc.Client
             server.Start();
         }
 
-        private static void proxyCall()
+        /// <summary>
+        /// open a http proxy to replace local client
+        /// </summary>
+        private static void RunProxy()
         {
             InitProxy(proxyHost);
         }
 
-        private static void gRpcCall()
+        private static void GRpcCall()
         {
-            RunServer();
             Channel channel = default;
             Console.WriteLine("Hello This is your gRpc !");
             Console.WriteLine("================================================================");
@@ -95,6 +97,10 @@ namespace gRpc.Client
             }
         }
 
+        /// <summary>
+        /// create a http proxy
+        /// </summary>
+        /// <param name="proxyAddress"></param>
         private static void InitProxy(string proxyAddress)
         {
             proxyServer = new ProxyServer
@@ -107,16 +113,20 @@ namespace gRpc.Client
             var proxyAddArray = proxyAddress.Split(':');
             var proxyPort = int.Parse(proxyAddArray[1]);
 
-            proxyServer.BeforeRequest += onRequest;
+            proxyServer.BeforeRequest += OnRequest;
             var explicitEndPoint = new ExplicitProxyEndPoint(IPAddress.Parse(proxyAddArray[0]), proxyPort);
             proxyServer.AddEndPoint(explicitEndPoint);
             proxyServer.Start();
         }
 
-        //处理需要拦截的请求
-        private static Task onRequest(object sender, SessionEventArgs e)
+        /// <summary>
+        /// add client keys to header
+        /// </summary>
+        /// <param name="sender">1</param>
+        /// <param name="e">2</param>
+        /// <returns></returns>
+        private static Task OnRequest(object sender, SessionEventArgs e)
         {
-            //匹配时，必须转为小写
             //var url = e.HttpClient.Request.Url.ToLower();
             e.HttpClient.Request.Headers.AddHeader("Client", clientKey);
             e.HttpClient.Request.Headers.AddHeader("ClientAddress", clientHost);
