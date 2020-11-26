@@ -1,10 +1,7 @@
 ﻿using gRpc.Library.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 
-namespace gRpc.Servers.Helpers
+namespace WebApi.Host.Helpers
 {
     public static class WebHelper
     {

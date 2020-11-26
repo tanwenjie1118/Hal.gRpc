@@ -3,7 +3,9 @@ using gRpc.Library.Server;
 using Grpc.Core;
 using System;
 using System.Configuration;
+using System.IO;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Titanium.Web.Proxy;
 using Titanium.Web.Proxy.EventArguments;
@@ -105,18 +107,23 @@ namespace gRpc.Client
         {
             proxyServer = new ProxyServer
             {
-                ForwardToUpstreamGateway = true
+                ForwardToUpstreamGateway = true,
             };
-
+            //proxyServer.CertificateManager.CertificateEngine = Titanium.Web.Proxy.Network.CertificateEngine.DefaultWindows;
+            //proxyServer.CertificateManager.EnsureRootCertificate();
             proxyServer.CertificateManager.SaveFakeCertificates = true;
 
             var proxyAddArray = proxyAddress.Split(':');
             var proxyPort = int.Parse(proxyAddArray[1]);
 
             proxyServer.BeforeRequest += OnRequest;
+            //proxyServer.ServerCertificateValidationCallback += OnCertificateValidation;
+            //proxyServer.ClientCertificateSelectionCallback += OnCertificateSelection;
+
             var explicitEndPoint = new ExplicitProxyEndPoint(IPAddress.Parse(proxyAddArray[0]), proxyPort);
             proxyServer.AddEndPoint(explicitEndPoint);
             proxyServer.Start();
+            //proxyServer.SetAsSystemHttpsProxy(explicitEndPoint);
         }
 
         /// <summary>
@@ -131,7 +138,21 @@ namespace gRpc.Client
             e.HttpClient.Request.Headers.AddHeader("Client", clientKey);
             e.HttpClient.Request.Headers.AddHeader("ClientAddress", clientHost);
             e.HttpClient.Request.Host = webHost;
+            return Task.CompletedTask;
+        }
 
+        // 允许重写默认的证书验证逻辑
+        private static Task OnCertificateValidation(object sender, CertificateValidationEventArgs e)
+        {
+            // 根据证书错误，设置IsValid为真/假
+            if (e.SslPolicyErrors == System.Net.Security.SslPolicyErrors.None)
+                e.IsValid = true;
+            return Task.CompletedTask;
+        }
+        // 允许在相互身份验证期间重写默认客户端证书选择逻辑
+        private static Task OnCertificateSelection(object sender, CertificateSelectionEventArgs e)
+        {
+            // set e.clientCertificate to override
             return Task.CompletedTask;
         }
     }

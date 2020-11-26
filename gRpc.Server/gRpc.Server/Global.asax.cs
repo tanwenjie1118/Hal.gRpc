@@ -14,17 +14,25 @@ namespace gRpc.Servers
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            var splitstr = serverHost.Split(':');
-            var port = Convert.ToInt32(splitstr[1]);
-            var serverImp = new ServiceImpl();
-            Server server = new Server
-            {
-                Services = { DataServer.DataServer.BindService(serverImp) },
-                Ports = { new ServerPort(splitstr[0], port, ServerCredentials.Insecure) }
-            };
 
-            server.Start();
-            //server.ShutdownAsync().Wait();
+            try
+            {
+                // run gRpc
+                var splitstr = serverHost.Split(':');
+                var port = Convert.ToInt32(splitstr[1]);
+                var serverImp = new ServiceImpl();
+                Server server = new Server
+                {
+                    Services = { DataServer.DataServer.BindService(serverImp) },
+                    Ports = { new ServerPort(splitstr[0], port, ServerCredentials.Insecure) }
+                };
+
+                server.Start();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("gRpc service start failed", ex);
+            }
         }
     }
 }

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gRpc.Servers", "gRpc.Server
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gRpc.Library", "gRpc.ibrary\gRpc.Library.csproj", "{38C86473-7D2A-4129-92F1-AAA5C8AF00D2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi.Host", "WebApi.Host\WebApi.Host.csproj", "{C83B4CF6-E635-471C-B7A9-E58ECC9D8C4B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{38C86473-7D2A-4129-92F1-AAA5C8AF00D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38C86473-7D2A-4129-92F1-AAA5C8AF00D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38C86473-7D2A-4129-92F1-AAA5C8AF00D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C83B4CF6-E635-471C-B7A9-E58ECC9D8C4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C83B4CF6-E635-471C-B7A9-E58ECC9D8C4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C83B4CF6-E635-471C-B7A9-E58ECC9D8C4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C83B4CF6-E635-471C-B7A9-E58ECC9D8C4B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
